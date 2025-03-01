@@ -15,31 +15,31 @@ The following document is a journal of the building process of the casino-jackpo
 - **Display:** 1 row with 3 blocks.
 - **Win Condition:** All blocks show the same symbol.
 - **Symbols & Rewards:**
-  - Cherry: +10 credits
-  - Lemon: +20 credits
-  - Orange: +30 credits
-  - Watermelon: +40 credits
+    - Cherry: +10 credits
+    - Lemon: +20 credits
+    - Orange: +30 credits
+    - Watermelon: +40 credits
 
 ### Server-Side
 
 - **State Management:** Keep session state on the server.
 - **Roll Logic:**
-  - **< 40 credits:** Pure randomness.
-  - **40–60 credits:** For winning rolls, 30% chance to re-roll.
-  - **> 60 credits:** For winning rolls, 60% chance to re-roll.
+    - **< 40 credits:** Pure randomness.
+    - **40–60 credits:** For winning rolls, 30% chance to re-roll.
+    - **> 60 credits:** For winning rolls, 60% chance to re-roll.
 - **Cash Out:** Endpoint to transfer session credits to the user's account and close the session.
 
 ### Client-Side
 
 - **UI:**
-  - Minimal table with 3 blocks (use C, L, O, W for symbols).
-  - A button to start the game.
+    - Minimal table with 3 blocks (use C, L, O, W for symbols).
+    - A button to start the game.
 - **Animation:**
-  - On roll, all blocks show a spinning state (e.g., "X").
-  - Reveal results sequentially: 1st block after 1s, 2nd after 2s, 3rd after 3s.
+    - On roll, all blocks show a spinning state (e.g., "X").
+    - Reveal results sequentially: 1st block after 1s, 2nd after 2s, 3rd after 3s.
 - **Credit Handling:**
-  - **Win:** Increase credits by reward amount.
-  - **Loss:** Deduct 1 credit.
+    - **Win:** Increase credits by reward amount.
+    - **Loss:** Deduct 1 credit.
 
 ## 2. Tech Stack
 
