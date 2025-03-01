@@ -1,0 +1,32 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model Player {
+    id            Int            @id @default(autoincrement())
+    name          String         @unique
+    passwordHash  String         @map("password_hash")
+    game          Game?          
+    
+    createdAt     DateTime       @default(now()) @map("created_at")
+    updatedAt     DateTime       @updatedAt @map("updated_at")
+
+    @@map("players")
+}
+
+model Game {
+    id            Int            @id @default(autoincrement())
+    player        Player         @relation(fields: [playerId], references: [id], onDelete: Cascade)
+    playerId      Int            @unique @map("player_id")  
+    credits       Int            @default(0)
+
+    createdAt     DateTime       @default(now()) @map("created_at")
+    updatedAt     DateTime       @updatedAt @map("updated_at")
+
+    @@map("games")
+}
