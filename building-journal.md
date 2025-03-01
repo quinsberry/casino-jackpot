@@ -57,3 +57,15 @@ The following document is a journal of the building process of the casino-jackpo
 - **ORM**: Prisma. It is a great ORM that provides excellent DX, is easy to use, and I’m familiar with it. (Note: If I had more time, I would have tried Drizzle ORM.)
 
 ## 3. Architecture
+
+### Database
+
+![Database Schema](./casino-jackpot-db.png)
+
+### API
+
+Module-based architecture is a good fit for the API and common for NestJS apps. It's easy to add new modules and services to the app.
+
+### Web
+
+I chose the mix of Feature-based architecture and Feature-sliced design to handle the simplicity of the app and make it easier to scale.
