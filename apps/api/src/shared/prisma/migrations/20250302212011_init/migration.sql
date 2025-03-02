@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "players" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
     "password_hash" TEXT NOT NULL,
     "balance" INTEGER NOT NULL DEFAULT 0,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -19,7 +19,7 @@ CREATE TABLE "games" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "players_name_key" ON "players"("name");
+CREATE UNIQUE INDEX "players_username_key" ON "players"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "games_player_id_key" ON "games"("player_id");

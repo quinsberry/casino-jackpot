@@ -1,7 +1,7 @@
 import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { PlayerRepository } from './player.repository';
-import { AuthGuard } from '../auth/auth.guard';
 import { ResponseSingle } from '@/shared/responses/ResponseSingle';
+import { AuthGuard, CurrentAuthPayload, AuthPayload } from '@/modules/auth/auth.utils';
 
 @Controller('player')
 export class PlayerController {
@@ -9,8 +9,8 @@ export class PlayerController {
 
     @UseGuards(AuthGuard)
     @Get('profile')
-    async findProfile(@Request() req) {
-        const { passwordHash, ...user } = await this.playerRepository.findOneById(req.player.id);
+    async findProfile(@CurrentAuthPayload() auth: AuthPayload) {
+        const { passwordHash, ...user } = await this.playerRepository.findOneById(auth.id);
         return new ResponseSingle(user);
     }
 

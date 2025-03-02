@@ -1,18 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-
+import { Controller, Get, Post, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard, CurrentAuthPayload, AuthPayload } from '@/modules/auth/auth.utils';
+import { ResponseSingle } from '@/shared/responses/ResponseSingle';
+import { GameService } from './game.service';
 @Controller('game')
 export class GameController {
-    constructor() {}
+    constructor(private readonly gameService: GameService) {}
 
+    @UseGuards(AuthGuard)
     @Post()
-    create(@Body() createGameDto: any) {}
+    async create(@CurrentAuthPayload() auth: AuthPayload) {
+        const newGame = await this.gameService.createGame(auth.id);
+        return new ResponseSingle(newGame);
+    }
 
+    @UseGuards(AuthGuard)
     @Post(':gameId/roll')
-    roll(@Param('gameId') gameId: string, @Body() createGameDto: any) {}
+    async roll(@Param('gameId') gameId: string, @CurrentAuthPayload() auth: AuthPayload) {
+        const { credits, result } = await this.gameService.roll(Number(gameId), auth.id);
+        return new ResponseSingle({
+            credits,
+            result,
+        });
+    }
 
+    @UseGuards(AuthGuard)
     @Get('/current')
-    findOne(@Param('id') id: string) {}
+    async findOne(@CurrentAuthPayload() auth: AuthPayload) {
+        const game = await this.gameService.getCurrentGame(auth.id);
+        return new ResponseSingle(game ?? null);
+    }
 
+    @UseGuards(AuthGuard)
     @Delete(':gameId/cashout')
-    cashout(@Param('gameId') gameId: string) {}
+    async cashout(@Param('gameId') gameId: string, @CurrentAuthPayload() auth: AuthPayload) {
+        const player = await this.gameService.closeAndCashout(Number(gameId), auth.id);
+        return new ResponseSingle(player, 'Cashout successful');
+    }
 }

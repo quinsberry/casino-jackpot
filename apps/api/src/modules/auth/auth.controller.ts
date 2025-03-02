@@ -1,19 +1,7 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    HttpCode,
-    HttpStatus,
-    UseGuards,
-    Request,
-    Res,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from '@repo/api/auth.dto';
-import { AuthGuard } from './auth.guard';
 import { ResponseSingle } from '@/shared/responses/ResponseSingle';
 import { ResponseOK } from '@/shared/responses/ResponseOK';
 
@@ -33,12 +21,6 @@ export class AuthController {
     async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
         const user = await this.authService.login(loginDto.username, loginDto.password, res);
         return new ResponseSingle(user);
-    }
-
-    @UseGuards(AuthGuard)
-    @Get('/token_val')
-    getProfile(@Request() req) {
-        return req.player;
     }
 
     @HttpCode(HttpStatus.NO_CONTENT)

@@ -14,22 +14,21 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-
     async register(username: string, password: string) {
-        const user = await this.playerRepository.findOneByName(username);
+        const user = await this.playerRepository.findOneByUsername(username);
         if (user) {
             throw new UnauthorizedException('Player with this username already exists');
         }
         const passwordHash = await AuthService.hashPassword(password);
         return this.playerRepository.create({
-            name: username,
+            username,
             passwordHash,
             balance: 0,
         });
     }
 
     async login(username: string, password: string, res: Response) {
-        const user = await this.playerRepository.findOneByName(username);
+        const user = await this.playerRepository.findOneByUsername(username);
         if (!user) {
             throw new UnauthorizedException('Invalid username or password');
         }
@@ -38,7 +37,7 @@ export class AuthService {
             throw new UnauthorizedException('Invalid username or password');
         }
         const { passwordHash, ...result } = user;
-        const payload = { id: user.id, username: user.name };
+        const payload = { id: user.id, username: user.username };
         const token = await this.jwtService.signAsync(payload);
         setCookieToken(res, token);
         return result;

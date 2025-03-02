@@ -1,6 +1,6 @@
 import { PrismaService } from '@/shared/prisma/prisma.service';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Player } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { Player, Prisma } from '@prisma/client';
 
 @Injectable()
 export class PlayerRepository {
@@ -15,11 +15,28 @@ export class PlayerRepository {
         return player;
     }
 
-    async findOneByName(name: string) {
+    async findOneByUsername(username: string) {
         const player = await this.prisma.player.findUnique({
             where: {
-                name,
+                username,
             },
+        });
+        return player;
+    }
+
+    async updateById1(id: number, data: Partial<Player>) {
+        const player = await this.prisma.player.update({
+            where: { id },
+            data,
+        });
+        return player;
+    }
+
+    async updateById(id: number, data: Partial<Player>, tx?: Prisma.TransactionClient) {
+        const client = tx || this.prisma;
+        const player = await client.player.update({
+            where: { id },
+            data,
         });
         return player;
     }

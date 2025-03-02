@@ -1,8 +1,5 @@
-import { Injectable } from '@nestjs/common';
-
 export type JackpotSymbol = keyof typeof JackpotEngine.constants;
 
-@Injectable()
 export class JackpotEngine {
     constructor() {}
 

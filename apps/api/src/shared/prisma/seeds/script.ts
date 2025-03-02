@@ -7,21 +7,21 @@ async function main() {
     NestFactory.createApplicationContext(AppModule).then(async (appContext) => {
         const prisma = new PrismaClient();
 
-
         async function seedUsers() {
             await prisma.player.createMany({
                 data: [
                     {
-                        name: 'admin',
+                        username: 'admin',
                         passwordHash: await AuthService.hashPassword('root'),
                     },
                 ],
             });
         }
 
-        return seedUsers().then(() => {
-            console.log('Seeding successful!');
-        })
+        return seedUsers()
+            .then(() => {
+                console.log('Seeding successful!');
+            })
             .catch(async (error) => {
                 console.error('Seeding failed!');
                 console.error(error);
