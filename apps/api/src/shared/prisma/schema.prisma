@@ -11,6 +11,7 @@ model Player {
     id            Int            @id @default(autoincrement())
     name          String         @unique
     passwordHash  String         @map("password_hash")
+    balance       Int            @default(0)
     game          Game?          
     
     createdAt     DateTime       @default(now()) @map("created_at")

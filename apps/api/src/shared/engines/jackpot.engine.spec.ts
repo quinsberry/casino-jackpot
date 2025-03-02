@@ -30,18 +30,18 @@ describe('JackpotEngine', () => {
             it('should generate all possible symbols with equal probability', () => {
                 const symbolCounts = new Map<JackpotSymbol, number>();
                 const totalRolls = 1000;
-                
+
                 // Count occurrences of each symbol
                 for (let i = 0; i < totalRolls; i++) {
                     const result = engine.roll(0);
-                    result.forEach(symbol => {
+                    result.forEach((symbol) => {
                         symbolCounts.set(symbol, (symbolCounts.get(symbol) || 0) + 1);
                     });
                 }
 
                 // Each symbol should appear roughly equal times (within 20% margin)
                 const expectedCount = (totalRolls * 3) / Object.keys(JackpotEngine.constants).length;
-                symbolCounts.forEach(count => {
+                symbolCounts.forEach((count) => {
                     expect(count).toBeGreaterThan(expectedCount * 0.8);
                     expect(count).toBeLessThan(expectedCount * 1.2);
                 });
@@ -65,7 +65,7 @@ describe('JackpotEngine', () => {
             it('should not reroll for non-winning combinations', () => {
                 generateRollSpy.mockReturnValue(['CHERRY', 'LEMON', 'ORANGE']);
                 mockRandom.mockReturnValue(0.1); // Would trigger reroll if winning
-                
+
                 engine.roll(60);
                 expect(generateRollSpy).toHaveBeenCalledTimes(1);
             });
@@ -127,7 +127,7 @@ describe('JackpotEngine', () => {
                 ['ORANGE', 'CHERRY', 'WATERMELON'],
             ];
 
-            testCases.forEach(testCase => {
+            testCases.forEach((testCase) => {
                 expect(engine.convertToCredits(testCase)).toBe(0);
             });
         });
