@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { describe, it, expect, jest, afterAll } from '@jest/globals';
 
-import RootPage from '../app/page';
+import RootPage from '../src/app/page';
 
 window.fetch = jest.fn().mockImplementation(() =>
     Promise.resolve({
