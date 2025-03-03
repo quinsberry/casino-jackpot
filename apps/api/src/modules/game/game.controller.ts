@@ -2,7 +2,7 @@ import { Controller, Get, Post, Param, Delete, UseGuards } from '@nestjs/common'
 import { AuthGuard, CurrentAuthPayload, AuthPayload } from '@/modules/auth/auth.utils';
 import { ResponseSingle } from '@/shared/responses/ResponseSingle';
 import { GameService } from './game.service';
-@Controller('game')
+@Controller('games')
 export class GameController {
     constructor(private readonly gameService: GameService) {}
 

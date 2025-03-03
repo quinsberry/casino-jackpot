@@ -3,7 +3,7 @@ import { PlayerRepository } from './player.repository';
 import { ResponseSingle } from '@/shared/responses/ResponseSingle';
 import { AuthGuard, CurrentAuthPayload, AuthPayload } from '@/modules/auth/auth.utils';
 
-@Controller('player')
+@Controller('players')
 export class PlayerController {
     constructor(private readonly playerRepository: PlayerRepository) {}
 

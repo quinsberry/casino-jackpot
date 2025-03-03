@@ -20,7 +20,7 @@ export class GameService {
     async createGame(playerId: number) {
         const game = await this.gameRepository.findOneByPlayerId(playerId);
         if (game) {
-            throw new BadRequestException('Game already exists');
+            return game;
         }
         const player = await this.playerRepository.findOneById(playerId);
         const credits = player.balance > 0 ? player.balance : this.INITIAL_CREDITS;
@@ -70,9 +70,7 @@ export class GameService {
             const { passwordHash, ...player } = await tx.player.update({
                 where: { id: game.playerId },
                 data: {
-                    balance: {
-                        increment: game.credits,
-                    },
+                    balance: game.credits,
                 },
             });
             return player;
