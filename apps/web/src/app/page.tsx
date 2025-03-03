@@ -1,7 +1,11 @@
+'use client';
+
+import { SlotMachine } from '@/features/slot-machine';
+
 const RootPage = () => {
     return (
-        <div>
-            <h1>Hello World</h1>
+        <div className="min-h-screen bg-secondary flex items-center justify-center p-4">
+            <SlotMachine isAuth={false} updateBalance={() => {}} />
         </div>
     );
 };
