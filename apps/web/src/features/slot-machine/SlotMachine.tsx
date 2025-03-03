@@ -20,16 +20,17 @@ export const GameSymbolsIcons = {
     [GameSymbols.WATERMELON]: '🍉',
 };
 export const SlotMachine: FunctionComponent<SlotMachineProps> = ({ isAuth, updateBalance }) => {
-    const { game, slots, isSlotsSpinning, isGameClosing, startGame, roll, closeGame } = useSlotMachineStore({
+    const { game, slots, isSlotsSpinning, isGameClosing, startGame, roll, closeGame, checkGame } = useSlotMachineStore({
         updateBalance,
         initialSlots: ['WATERMELON', 'WATERMELON', 'WATERMELON'],
     });
 
     useEffect(() => {
         if (isAuth) {
-            startGame();
+            checkGame();
         }
     }, [isAuth]);
+    console.log(game);
 
     return (
         <Card className="w-full max-w-md p-6 bg-background">
@@ -54,6 +55,9 @@ export const SlotMachine: FunctionComponent<SlotMachineProps> = ({ isAuth, updat
             </div>
 
             <div className="space-y-4">
+                <Button className="w-full h-12 text-lg" disabled={!!game} onClick={startGame}>
+                    Start Game
+                </Button>
                 <Button
                     className="w-full h-12 text-lg"
                     disabled={isSlotsSpinning || !game || game.credits === 0}

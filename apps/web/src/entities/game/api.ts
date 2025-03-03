@@ -3,17 +3,19 @@ import { Game, Player } from '@repo/api/models';
 import { GameSymbol } from './model';
 
 export const getCurrentGame = () => {
-    return ApiClient.get<{ data: Game }>('/game');
+    return ApiClient.get<{ data: Game }>('/games/current');
 };
 
 export const createGame = () => {
-    return ApiClient.post<{ data: Game }>('/game');
+    return ApiClient.post<{ data: Game }>('/games');
 };
 
 export const roll = (gameId: number) => {
-    return ApiClient.post<{ credits: number; result: [GameSymbol, GameSymbol, GameSymbol] }>(`/game/${gameId}/roll`);
+    return ApiClient.post<{ data: { credits: number; result: [GameSymbol, GameSymbol, GameSymbol] } }>(
+        `/games/${gameId}/roll`,
+    );
 };
 
 export const cashout = (gameId: number) => {
-    return ApiClient.post<{ data: Player }>(`/game/${gameId}/cashout`);
+    return ApiClient.delete<{ data: Player }>(`/games/${gameId}/cashout`);
 };

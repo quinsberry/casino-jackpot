@@ -22,15 +22,27 @@ export const useSlotMachineStore = ({ updateBalance, initialSlots }: UseSlotMach
     const startGame = async () => {
         if (!game) {
             try {
-                const { data: game } = await apiGetCurrentGame();
-                if (game) {
-                    setGame(game);
+                setIsSlotsSpinning(true);
+                let currGameResponse = await apiGetCurrentGame();
+                if (!currGameResponse.data) {
+                    currGameResponse = await apiCreateGame();
                 }
+                setGame(currGameResponse.data);
             } catch (error: unknown) {
-                if (error instanceof ResponseError && error.statusCode === 404) {
-                    const { data: game } = await apiCreateGame();
-                    setGame(game);
-                }
+                console.error(error);
+            } finally {
+                setIsSlotsSpinning(false);
+            }
+        }
+    };
+
+    const checkGame = async () => {
+        if (!game) {
+            try {
+                let currGameResponse = await apiGetCurrentGame();
+                setGame(currGameResponse.data);
+            } catch (error: unknown) {
+                console.error(error);
             } finally {
                 setIsSlotsSpinning(false);
             }
@@ -49,9 +61,9 @@ export const useSlotMachineStore = ({ updateBalance, initialSlots }: UseSlotMach
     const roll = async () => {
         if (game) {
             setIsSlotsSpinning(true);
-            const data = await apiRoll(game.id).finally(() => setIsSlotsSpinning(false));
-            setGame({ ...game, credits: data.credits });
-            setSlots(data.result);
+            const rollResponse = await apiRoll(game.id).finally(() => setIsSlotsSpinning(false));
+            setGame({ ...game, credits: rollResponse.data.credits });
+            setSlots(rollResponse.data.result);
         }
     };
 
@@ -60,6 +72,7 @@ export const useSlotMachineStore = ({ updateBalance, initialSlots }: UseSlotMach
         slots,
         isSlotsSpinning,
         isGameClosing,
+        checkGame,
         startGame,
         closeGame,
         roll,

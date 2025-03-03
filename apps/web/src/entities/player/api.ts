@@ -3,7 +3,7 @@ import { LoginDto, RegisterDto } from '@repo/api/auth.dto';
 import { Player } from '@repo/api/models';
 
 export const getPlayerProfile = () => {
-    return ApiClient.get<{ data: Player }>('/player/profile');
+    return ApiClient.get<{ data: Player }>('/players/profile');
 };
 
 export const login = (dto: LoginDto) => {
