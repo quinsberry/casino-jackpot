@@ -68,7 +68,9 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <PlayerContext.Provider value={{ player, isLoading, error, login, logout, updatePlayerBalance }}>{children}</PlayerContext.Provider>
+        <PlayerContext.Provider value={{ player, isLoading, error, login, logout, updatePlayerBalance }}>
+            {children}
+        </PlayerContext.Provider>
     );
 };
 
