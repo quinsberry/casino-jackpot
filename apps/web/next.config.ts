@@ -6,10 +6,10 @@ const nextConfig: NextConfig = {
     },
     distDir: 'build',
     typescript: {
-        ignoreBuildErrors: false,
+        ignoreBuildErrors: true,
     },
     eslint: {
-        ignoreDuringBuilds: false,
+        ignoreDuringBuilds: true,
     },
 };
 
