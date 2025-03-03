@@ -2,8 +2,8 @@
 
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
-import { FunctionComponent, useEffect } from 'react';
-import { GameSymbols, useGame } from '@/entities/game';
+import { FunctionComponent, useEffect, useState } from 'react';
+import { GameSymbol, GameSymbols, useGame } from '@/entities/game';
 import { usePlayer } from '@/entities/player';
 
 export const GameSymbolsIcons = {
@@ -11,14 +11,42 @@ export const GameSymbolsIcons = {
     [GameSymbols.LEMON]: '🍋',
     [GameSymbols.ORANGE]: '🍊',
     [GameSymbols.WATERMELON]: '🍉',
+    ['LOADING']: '🔄',
 };
 
 export const SlotMachine: FunctionComponent = () => {
+    const { player } = usePlayer();
     const { currentGame, slots, isSlotsSpinning, isGameClosing, checkGame, startGame, roll, closeGame } = useGame();
+    const [visibleSlots, setVisibleSlots] = useState<[GameSymbol, GameSymbol, GameSymbol]>([
+        'WATERMELON',
+        'WATERMELON',
+        'WATERMELON',
+    ]);
 
     useEffect(() => {
         checkGame();
     }, []);
+
+    useEffect(() => {
+        if (isSlotsSpinning) {
+            setVisibleSlots(['LOADING', 'LOADING', 'LOADING'] as unknown as [GameSymbol, GameSymbol, GameSymbol]);
+
+            // Show first slot after 1s
+            setTimeout(() => {
+                setVisibleSlots((prev) => [slots[0], prev[1], prev[2]]);
+            }, 1000);
+
+            // Show second slot after 2s
+            setTimeout(() => {
+                setVisibleSlots((prev) => [prev[0], slots[1], prev[2]]);
+            }, 2000);
+
+            // Show third slot after 3s
+            setTimeout(() => {
+                setVisibleSlots(slots);
+            }, 3000);
+        }
+    }, [isSlotsSpinning, slots]);
 
     return (
         <Card className="w-full max-w-md p-6 bg-background">
@@ -30,12 +58,11 @@ export const SlotMachine: FunctionComponent = () => {
             </div>
 
             <div className="flex justify-center gap-4 mb-8">
-                {slots.map((symbol, index) => (
-                    <div
-                        key={index}
-                        className="w-20 h-20 bg-zinc-700 rounded-lg flex items-center justify-center text-4xl"
-                    >
-                        {GameSymbolsIcons[symbol]}
+                {visibleSlots.map((symbol, index) => (
+                    <div key={index} className="relative w-20 h-20 bg-zinc-700 rounded-lg overflow-hidden">
+                        <div className="absolute inset-0 flex items-center justify-center text-4xl">
+                            {GameSymbolsIcons[symbol]}
+                        </div>
                     </div>
                 ))}
             </div>
@@ -45,7 +72,7 @@ export const SlotMachine: FunctionComponent = () => {
                     <Button
                         className="w-full h-12 text-lg"
                         onClick={startGame}
-                        disabled={isSlotsSpinning || isGameClosing}
+                        disabled={isSlotsSpinning || isGameClosing || !player}
                     >
                         Start Game
                     </Button>

@@ -51,10 +51,11 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const response = await apiRoll(currentGame.id);
             setSlots(response.data.result);
-            setCurrentGame((prev) => (prev ? { ...prev, credits: response.data.credits } : null));
+            setTimeout(() => {
+                setCurrentGame((prev) => (prev ? { ...prev, credits: response.data.credits } : null));
+                setIsSlotsSpinning(false);
+            }, 3000);
         } catch (error) {
-            // Handle error if needed
-        } finally {
             setIsSlotsSpinning(false);
         }
     }, [currentGame]);
@@ -68,7 +69,6 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
             setSlots(['WATERMELON', 'WATERMELON', 'WATERMELON']);
             updatePlayerBalance(response.data.balance);
         } catch (error) {
-            // Handle error if needed
         } finally {
             setIsGameClosing(false);
         }
