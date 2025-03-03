@@ -80,7 +80,8 @@ export const SlotMachine: FunctionComponent = () => {
                     <>
                         <Button
                             className="w-full h-12 text-lg"
-                            disabled={isSlotsSpinning || currentGame.credits === 0}
+                            isInProgress={isSlotsSpinning}
+                            disabled={currentGame.credits === 0}
                             onClick={roll}
                         >
                             Roll
@@ -89,7 +90,8 @@ export const SlotMachine: FunctionComponent = () => {
                         <Button
                             variant="outline"
                             className="w-full"
-                            disabled={isGameClosing || isSlotsSpinning}
+                            isInProgress={isGameClosing}
+                            disabled={isSlotsSpinning}
                             onClick={closeGame}
                         >
                             Cashout
