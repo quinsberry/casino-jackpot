@@ -17,7 +17,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/shared/ui/dialog';
-import { Player } from '@repo/api/models';
+import { usePlayer } from '@/entities/player';
 
 const formSchema = z.object({
     username: z.string().min(2, {
@@ -28,15 +28,9 @@ const formSchema = z.object({
     }),
 });
 
-interface LoginDialogProps {
-    onSubmit: (username: string, password: string) => Promise<Player | null>;
-    disabled?: boolean;
-}
-
-export const LoginDialog: FunctionComponent<LoginDialogProps> = ({ onSubmit, disabled }) => {
+export const LoginDialog: FunctionComponent = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const { login, isLoading, error } = usePlayer();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -47,49 +41,22 @@ export const LoginDialog: FunctionComponent<LoginDialogProps> = ({ onSubmit, dis
 
     const handleOnOpenChange = (open: boolean) => {
         setIsOpen(open);
-        setErrorMessage(null);
         form.reset();
     };
 
     async function handleOnSubmit(data: z.infer<typeof formSchema>) {
-        if (isLoading) {
-            return;
-        }
-
-        setIsLoading(true);
-        setErrorMessage(null);
-
         try {
-            const player = await onSubmit(data.username, data.password);
-            if (player) {
-                setIsOpen(false);
-            }
+            await login(data.username, data.password);
+            setIsOpen(false);
         } catch (error) {
-            setErrorMessage(error instanceof Error ? error.message : 'Unknown error');
-            console.error('login error', error);
-        } finally {
-            setIsLoading(false);
+            // Error is handled by the store
         }
-    }
-
-    const handleFormSubmit = async () => {
-        const isValid = await form.trigger();
-        if (!isValid) {
-            return;
-        }
-
-        const data = form.getValues();
-        handleOnSubmit(data);
-    };
-
-    if (disabled) {
-        return null;
     }
 
     return (
         <Dialog open={isOpen} onOpenChange={handleOnOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="outline" disabled={disabled}>
+                <Button variant="outline" disabled={isLoading}>
                     Login
                 </Button>
             </DialogTrigger>
@@ -107,7 +74,7 @@ export const LoginDialog: FunctionComponent<LoginDialogProps> = ({ onSubmit, dis
                                 <FormItem>
                                     <FormLabel>Username</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter username" onEnter={handleFormSubmit} {...field} />
+                                        <Input placeholder="Enter username" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -120,17 +87,12 @@ export const LoginDialog: FunctionComponent<LoginDialogProps> = ({ onSubmit, dis
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            type="password"
-                                            placeholder="Enter password"
-                                            onEnter={handleFormSubmit}
-                                            {...field}
-                                        />
+                                        <Input type="password" placeholder="Enter password" {...field} />
                                     </FormControl>
                                     <FormMessage />
-                                    {errorMessage ? (
+                                    {error ? (
                                         <FormDescription className="text-destructive text-center">
-                                            {errorMessage}
+                                            {error}
                                         </FormDescription>
                                     ) : null}
                                 </FormItem>
