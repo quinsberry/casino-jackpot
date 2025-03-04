@@ -10,8 +10,8 @@ export class PlayerController {
     @UseGuards(AuthGuard)
     @Get('profile')
     async findProfile(@CurrentAuthPayload() auth: AuthPayload) {
-        const { passwordHash, ...user } = await this.playerRepository.findOneById(auth.id);
-        return new ResponseSingle(user);
+        const { passwordHash, ...player } = await this.playerRepository.findOneById(auth.id);
+        return new ResponseSingle(player);
     }
 
     @Get(':id')
