@@ -14,6 +14,9 @@
         "start": {
             "dependsOn": ["^start"]
         },
+        "init": {
+            "dependsOn": ["^init"]
+        },
         "lint": {},
         "test": {},
         "test:e2e": {}

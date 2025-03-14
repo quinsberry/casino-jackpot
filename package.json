@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "turbo run dev",
+    "init": "turbo run init",
     "build": "turbo run build",
     "start": "turbo run start",
     "test": "turbo run test",

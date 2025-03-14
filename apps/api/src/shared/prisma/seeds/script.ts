@@ -6,16 +6,10 @@ import { AuthService } from '@/modules/auth/auth.service';
 async function main() {
     NestFactory.createApplicationContext(AppModule).then(async (appContext) => {
         const prisma = new PrismaClient();
+        const authService = appContext.get(AuthService);
 
         async function seedUsers() {
-            await prisma.player.createMany({
-                data: [
-                    {
-                        username: 'admin',
-                        passwordHash: await AuthService.hashPassword('root'),
-                    },
-                ],
-            });
+            await authService.register('admin', 'root');
         }
 
         return seedUsers()

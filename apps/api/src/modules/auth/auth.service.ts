@@ -23,7 +23,7 @@ export class AuthService {
         return this.playerRepository.create({
             username,
             passwordHash,
-            balance: 0,
+            balance: 10,
         });
     }
 
