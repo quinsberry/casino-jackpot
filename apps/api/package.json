@@ -4,9 +4,9 @@
     "private": true,
     "scripts": {
         "dev": "nest start --watch",
-        "init": "npm run prisma:seed",
+        "init": "cp .env.example .env && npm run prisma:seed",
         "build": "nest build",
-        "start": "node dist/src/main",
+        "start": "node dist/main",
         "start:debug": "nest start --debug --watch",
         "prisma:init": "prisma migrate dev --name init",
         "prisma:deploy": "prisma migrate deploy",

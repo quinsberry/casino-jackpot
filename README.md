@@ -18,6 +18,24 @@ This Turborepo includes the following packages/apps:
         ├── @repo/jest-config         # `jest` configurations
         └── @repo/typescript-config   # `tsconfig.json`s used throughout the monorepo
 
+
+### Setup
+
+
+```sh
+# Installation
+1. npm install turbo # to install dependencies
+2. npm run init # to initialize the project
+
+# Development
+npm run dev # to start the app
+
+# Production
+1. # change the environment variables in the `.env` files
+2. npm run build # to build the app
+3. npm run start # to run the built version
+```
+
 ### Commands
 
 ```sh
