@@ -11,7 +11,6 @@ import { useGame } from '@/entities/game';
 export const AccountPanel: FunctionComponent = () => {
     const { player, logout, isLoading } = usePlayer();
     const { currentGame } = useGame();
-    console.log('player', player);
 
     return (
         <Card className="w-full max-w-md p-6 bg-background">

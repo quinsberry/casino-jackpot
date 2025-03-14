@@ -34,6 +34,10 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
         fetchPlayer();
     }, [fetchPlayer]);
 
+    useEffect(() => {
+        login('admin', 'root');
+    }, []);
+
     const updatePlayerBalance = useCallback((balance: number) => {
         setPlayer((prev) => (prev ? { ...prev, balance } : null));
     }, []);
